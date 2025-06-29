@@ -1,17 +1,8 @@
-# FairShareCoin
+# fairsharecoin.org
 
-**One coin. One person. Forever.**
-
-FairShareCoin (FSC) is a digital currency built on radical fairness: each human receives one FSC, verified through identity — no mining, no inflation, no transaction fees.
-
-Explore the project website:  
+The official FairShareCoin website.  
 https://fairsharecoin.org
 
-This repository is currently reserved for future documentation and coordination.
+Fair. Final. Yours.  
 
----
-
-## Contributions
-
-We welcome discussion, outreach, and collaboration.  
-Email: info@fairsharecoin.org
+→ For core logic: https://github.com/fairsharecoin/fairsharecoin
