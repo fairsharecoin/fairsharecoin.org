@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="FairShareCoin architecture: identity anchored issuance, node roles, transfer pipeline, key lifecycle, recovery, and scaling strategy." />
+  <title>FSC Architecture — FairShareCoin</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #fff;
+      color: #111;
+      text-align: center;
+      padding: 2rem 1rem;
+      line-height: 1.65;
+      max-width: 920px;
+      margin: auto;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.45rem; }
+    h2 { font-size: 1.45rem; margin-top: 2rem; margin-bottom: 0.45rem; }
+    h3 { font-size: 1.15rem; margin-top: 1.4rem; }
+    p, ul, ol { text-align: justify; margin: 0.9rem 0; }
+    ul, ol { padding-left: 1.4rem; text-align: left; }
+    a { color: #007777; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .center { text-align: center; }
+    .chip {
+      display:inline-block; border:1px solid #ddd; border-radius:999px;
+      padding:0.2rem 0.7rem; font-size:0.85rem; color:#333;
+      background:#fafafa; text-decoration:none;
+    }
+    .toc {
+      margin: 1.6rem 0;
+      display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; justify-content: center;
+      font-size: 0.95rem;
+    }
+    .status-box {
+      border:1px solid #ddd; border-radius:8px; background:#fafafa;
+      text-align:left; padding:0.85rem 1rem; margin:1rem 0;
+    }
+    details {
+      border: 1px solid #ddd; border-radius: 6px;
+      background:#f9f9f9; padding: 0.55rem 0.9rem;
+      margin: 0.8rem 0; text-align:left;
+    }
+    summary { font-weight: 600; cursor: pointer; }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 1em; font-size: 0.95em;
+    }
+    table th, table td {
+      padding: 10px; border: 1px solid #aaa; text-align: left;
+    }
+    table thead { background-color: #f0f0f0; font-weight: bold; }
+    table tbody tr:nth-child(even) { background-color: #fafafa; }
+    blockquote {
+      margin:1rem 0; padding:0.6rem 0.85rem;
+      border-left:3px solid #ddd; background:#fafafa; text-align:left;
+    }
+    footer { margin-top:2.8rem; font-size:0.9em; color:#555; text-align:center; }
+    @media (max-width: 768px) {
+      table { display:block; overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch; }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="center" style="margin-top: 1rem;">
+    <a href="index.html">Home</a> •
+    <a href="why.html">Why it works</a> •
+    <a href="technical.html">Technical</a> •
+    <a href="architecture.html"><strong>FSC Architecture</strong></a> •
+    <a href="aiautonomy.html">AI &amp; Autonomy</a> •
+    <a href="pastcurrentpost.html">Past &amp; Post</a>
+  </p>
+
+  <p class="center" style="margin-top:0.35rem; margin-bottom:0.55rem;">
+    <a class="chip" href="index.html#status">Alpha (local-first)</a>
+  </p>
+
+  <h1>FSC Architecture</h1>
+  <p class="center"><em>This page is for builders: how FairShareCoin is structured, where constraints live, and how the system scales.</em></p>
+
+  <nav class="toc">
+    <a href="#scope">Scope &amp; Status</a>
+    <a href="#model">System Model</a>
+    <a href="#transfer">Transfer Pipeline</a>
+    <a href="#node-roles">Node Roles</a>
+    <a href="#identity-source">Identity Source</a>
+    <a href="#keymint">KEYMINT Lifecycle</a>
+    <a href="#recovery">Wallet Recovery</a>
+    <a href="#abuse">Abuse Controls</a>
+    <a href="#scaling">Scaling</a>
+    <a href="#resource">Resource Footprint</a>
+  </nav>
+
+  <h2 id="scope">Scope &amp; Status</h2>
+  <div class="status-box">
+    <ul>
+      <li>Current stage: <strong>alpha (local-first)</strong></li>
+      <li>Architecture direction is defined; components are being hardened iteratively</li>
+      <li>Identity verifier model is planned around ICAO standards; production rollout is phased</li>
+      <li>When wording differs from implementation, <code>fairsharecoin/foundation</code> is authoritative</li>
+    </ul>
+  </div>
+
+  <h2 id="model">System Model</h2>
+  <p>
+    FSC combines three layers: identity-anchored issuance, transaction routing, and auditable ledger state.
+    The key design goal is simple: constrain privilege at issuance, then let value move through real usage.
+  </p>
+
+  <ul>
+    <li><strong>Issuance layer:</strong> uniqueness checks for one-person base issuance eligibility</li>
+    <li><strong>Transfer layer:</strong> signed messages routed through nodes</li>
+    <li><strong>State layer:</strong> validated balances + history commitments for integrity and recovery</li>
+  </ul>
+
+  <h2 id="transfer">Transfer Pipeline (Email-Like UX, Cryptographic Core)</h2>
+  <p>
+    User experience is intentionally message-like: choose recipient, amount, send.
+    Under the hood, each transfer follows a strict verification path.
+  </p>
+  <ol>
+    <li>Client builds signed transfer intent</li>
+    <li>Node validates signature, limits, and state preconditions</li>
+    <li>Transaction is accepted/rejected deterministically</li>
+    <li>Ledger state updates and propagates across peers</li>
+    <li>Recipient view updates after confirmation</li>
+  </ol>
+
+  <h2 id="node-roles">Node Roles</h2>
+  <ul>
+    <li><strong>Full nodes:</strong> validation, state integrity, ledger serving, and policy enforcement</li>
+    <li><strong>Relay/partial nodes:</strong> routing and targeted verification roles</li>
+    <li><strong>Light clients:</strong> wallet-facing clients using compact state proofs/endpoints</li>
+  </ul>
+
+  <h2 id="identity-source">Identity Source &amp; COINMINT_ID Direction</h2>
+  <p>
+    FSC’s uniqueness anchor is COINMINT_ID: a deterministic identity-derived identifier used for issuance eligibility,
+    not public identity disclosure.
+  </p>
+
+  <details>
+    <summary>Design intent</summary>
+    <ul>
+      <li>Use ICAO-compliant document verification flow when live</li>
+      <li>Derive deterministic identity key from stable identity attributes</li>
+      <li>Exclude unstable fields (e.g. expiry date, nationality, sex marker) from uniqueness basis</li>
+      <li>Use public namespace separator (“public pepper”) for system-domain separation</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Renewal continuity</summary>
+    <p>
+      Passport renewal should preserve identity continuity and prevent duplicate issuance.
+      The model re-verifies under the same uniqueness logic and links continuity without reminting extra base issuance.
+    </p>
+  </details>
+
+  <p><a href="technical.html#identity">See technical identity section</a></p>
+
+  <h2 id="keymint">KEYMINT Lifecycle &amp; Signing Hygiene</h2>
+  <p>
+    KEYMINT is the operational signing layer: it reduces long-term key exposure and improves key rotation ergonomics.
+  </p>
+  <ul>
+    <li><strong>KEYMINT:</strong> transfer-capable signing key derived/linked under wallet authority</li>
+    <li><strong>CLEARKEYS:</strong> invalidates active transfer keys (e.g., compromise response)</li>
+    <li><strong>KEYREMINT:</strong> issues replacement transfer keys without changing ownership</li>
+    <li><strong>Era markers:</strong> optional “start/end” checkpoints for key generations, so nodes can sync and verify key history faster</li>
+  </ul>
+
+  <h2 id="recovery">Wallet Recovery</h2>
+  <p>
+    Recovery is continuity-based, not “new account minting.” If credentials are lost,
+    holder re-establishes control via verified continuity and relinks operational credentials.
+  </p>
+  <ol>
+    <li>User generates new operational credentials</li>
+    <li>Continuity proof is submitted under identity anchor policy</li>
+    <li>Node verifies linkage against existing wallet authority</li>
+    <li>Access is restored without issuing extra FSC</li>
+  </ol>
+
+  <h2 id="abuse">Abuse Controls</h2>
+  <ul>
+    <li>Rate-limits by wallet behavior and endpoint class</li>
+    <li>Recipient-side filtering controls</li>
+    <li>No “global silence switch” by default architecture direction</li>
+    <li>Deterministic validation path to reduce discretionary enforcement</li>
+  </ul>
+
+  <h2 id="scaling">Scaling: Pruning, Snapshots, and Sharding Direction</h2>
+  <p>
+    FSC scaling strategy is to keep full verification possible while reducing default storage burden.
+    Pruning and signed snapshots reduce historical overhead; sharding is a modular expansion path.
+  </p>
+
+  <h3>Estimated Storage with Pruning (No Sharding)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>User Base</th>
+        <th>Estimated Storage</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1 million</td><td>~5 GB</td><td>Global ledger, compact metadata model</td></tr>
+      <tr><td>21 million</td><td>~105 GB</td><td>Consumer-hardware feasible</td></tr>
+      <tr><td>100 million</td><td>~500 GB</td><td>Pruned metadata heavy use case</td></tr>
+      <tr><td>1 billion</td><td>~5 TB</td><td>Infrastructure-grade full participation</td></tr>
+      <tr><td>10 billion</td><td>~50 TB</td><td>Global scale, strongly benefits from sharding</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Estimated Storage per Node with 100 Shards</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>User Base</th>
+        <th>Storage per Shard</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1 million</td><td>~50 MB</td></tr>
+      <tr><td>21 million</td><td>~1.05 GB</td></tr>
+      <tr><td>100 million</td><td>~5 GB</td></tr>
+      <tr><td>1 billion</td><td>~50 GB</td></tr>
+      <tr><td>10 billion</td><td>~500 GB</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="resource">Indicative Network Resource Footprint</h2>
+  <p>
+    Order-of-magnitude estimates (assuming ~10 transfers/user/year) suggest FSC can remain lightweight
+    relative to many high-throughput systems.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>User Base</th>
+        <th>Yearly Transactions</th>
+        <th>Total Storage</th>
+        <th>Bandwidth per Full Node (year)</th>
+        <th>CPU per Full Node (year)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1 million</td><td>10 million</td><td>~2.5 GB</td><td>~256 MB</td><td>~33 seconds</td></tr>
+      <tr><td>21 million</td><td>210 million</td><td>~52.5 GB</td><td>~5.4 GB</td><td>~11.6 minutes</td></tr>
+      <tr><td>100 million</td><td>1 billion</td><td>~250 GB</td><td>~25 GB</td><td>~55 minutes</td></tr>
+      <tr><td>1 billion</td><td>10 billion</td><td>~2.5 TB</td><td>~250 GB</td><td>~9.2 hours</td></tr>
+      <tr><td>10 billion</td><td>100 billion</td><td>~25 TB</td><td>~2.5 TB</td><td>~3.8 days</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    Architecture goal: keep fairness constraints strict, implementation simple, and participation feasible on ordinary hardware wherever possible.
+  </blockquote>
+
+  <p><strong>From identity to infrastructure, every layer exists to protect one core rule: one being, one base share.</strong></p>
+
+  <p class="center" style="margin-top: 2rem;">
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Top</a> <br>
+    <a href="aiautonomy.html">AI &amp; Autonomy →</a> <br>
+    <a href="technical.html">← Back to Technical</a>
+  </p>
+
+  <footer>
+    <p style="font-size:0.8rem; margin-top:3rem;">© 2026 FairShareCoin.org — Free to share, free to build on.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="description" content="FairShareCoin is a fairness-first monetary experiment: one-person issuance, no mining race, and phased decentralization. Currently in alpha." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="FairShareCoin" />
+  <meta property="og:description" content="One Person. One Coin. A fairness-first monetary experiment in alpha." />
+  <meta property="og:url" content="https://fairsharecoin.org/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://fairsharecoin.org/assets/fsc-preview.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FairShareCoin" />
+  <meta name="twitter:description" content="FairShareCoin: fairness-first monetary experiment in alpha, with one-person issuance and phased decentralization." />
+  <meta name="twitter:image" content="https://fairsharecoin.org/assets/fsc-preview.png" />
+
+  <title>FairShareCoin</title>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #fff;
+      color: #111;
+      text-align: center;
+      line-height: 1.65;
+      padding: 2rem;
+      margin: 0 auto;
+      max-width: 860px;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      text-align: justify;
+      margin: 0.8rem 0;
+    }
+
+    a {
+      color: #007777;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 3rem;
+      font-size: 0.9em;
+      text-align: center;
+      color: #555;
+    }
+
+    .lead,
+    .center {
+      text-align: center;
+    }
+
+    .status-box {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      background: #fafafa;
+      text-align: left;
+    }
+
+    .status-box ul {
+      margin: 0.25rem 0 0;
+      padding-left: 1.2rem;
+    }
+
+    .small-note {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .cta-links p {
+      text-align: center;
+      margin: 0.4rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- FSC PicoFSC Clock -->
+  <div id="fsc-clock" style="
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    font-size: 0.8rem;
+    font-family: monospace;
+    background: rgba(255,255,255,0.86);
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px rgba(0,0,0,0.15);
+    z-index: 999;
+  ">
+    ⧖ Loading picos since FSC project started...
+  </div>
+
+  <script>
+    const fscStart = new Date("2024-04-24T00:00:00Z").getTime();
+    const nanosPerSecond = 1_000_000_000 / (80 * 365.25 * 24 * 60 * 60);
+
+    function updateNanoClock() {
+      const now = Date.now();
+      const elapsedSeconds = (now - fscStart) / 1000;
+      const totalNanos = Math.floor(elapsedSeconds * nanosPerSecond);
+      const formatted = totalNanos.toLocaleString('en-US');
+      document.getElementById("fsc-clock").textContent =
+        `⧖ ${formatted} nanoFSC since FSC project started`;
+    }
+
+    updateNanoClock();
+    setInterval(updateNanoClock, 1000);
+  </script>
+
+  <!-- Navigation -->
+  <p class="center" style="margin-top: 1rem;">
+    <a href="index.html"><strong>Home</strong></a> •
+    <a href="why.html">Why it works</a> •
+    <a href="technical.html">Technical</a> •
+    <a href="architecture.html">FSC Architecture</a> •
+    <a href="aiautonomy.html">AI &amp; Autonomy</a> •
+    <a href="pastcurrentpost.html">Past &amp; Post</a>
+  </p>
+
+  <p class="center" style="margin-top:0.3rem; margin-bottom:0.4rem;">
+    <a href="#status" style="display:inline-block; border:1px solid #ddd; border-radius:999px; padding:0.2rem 0.7rem; font-size:0.85rem; color:#333; text-decoration:none; background:#fafafa;">Alpha (local-first)</a>
+  </p>
+
+  <h1>One Person. One Coin.</h1>
+  <p class="lead"><strong>A fairness-first monetary experiment.</strong></p>
+
+  <blockquote class="center" style="font-style: italic; margin-top: 1.2rem;">
+    “Bitcoin may be the vault. FairShareCoin must be the water.”
+  </blockquote>
+
+  <p>
+    Most money systems reward position, timing, or scale.
+    FairShareCoin asks a different question: what if every human started from the same monetary baseline,
+    regardless of geography, class, or luck?
+  </p>
+
+  <p>
+    Powered by <strong>Proof‑of‑Being</strong>: one coin granted to every verified, living human.
+    <br /><em>No mining race. No luck. Just you.</em>
+  </p>
+
+  <p>
+    Forget gold, dollars, or Bitcoin.
+    <strong>Time is the only currency that matters.</strong>
+    FairShareCoin turns your presence into monetary agency — fairly and transparently.
+  </p>
+
+  <p>
+    <strong>One person. One coin.</strong>
+    <span style="white-space: nowrap;">No inflation race by design.</span>
+  </p>
+
+  <p><strong>Spend fractions as simply as sending a fee-light digital message.</strong></p>
+
+  <p>
+    Whether you're the 100th or 10 millionth to join, your share is the same.
+    It doesn’t matter where you live, what you earn, or when you arrive — you still get your one.
+  </p>
+
+  <p>
+    Spend it or save it, trade or gift.
+    Or earn fractions from others by doing good work, creating real value, or being worth remembering.
+  </p>
+
+  <p>
+    <strong>FairShareCoin does not claim intrinsic value.</strong>
+    Any value it has emerges from real human use, trust, and participation over time.
+  </p>
+
+  <section style="margin-top: 2rem;">
+    <h2>How it works (current direction)</h2>
+    <p>
+      Register → identity uniqueness path (future ICAO integration) → wallet activation →
+      send and receive value → account recovery continuity.
+    </p>
+  </section>
+
+  <details>
+    <summary style="cursor: pointer; font-weight: 500; text-align:left;">Design note: annual rebalance (burn/remint)</summary>
+    <p>
+      The current model includes a burn/remint cycle designed to reduce long-term hoarding pressure
+      and keep fairness aligned over time.
+      This mechanism remains part of ongoing design and implementation hardening.
+    </p>
+  </details>
+
+  <section id="status" style="margin-top: 2rem;">
+    <h2>Transparency &amp; Status</h2>
+
+    <div class="status-box" style="margin-top:0.75rem; margin-bottom:1rem;">
+      <h2 style="margin-top:0; font-size:1.1rem;">Current Status</h2>
+      <ul>
+        <li>Alpha (local-first), not production-ready</li>
+        <li>No live ICAO/NFC identity verification yet</li>
+        <li>No live decentralized consensus runtime yet</li>
+      </ul>
+    </div>
+
+    <p>
+      Active implementation baseline:
+      <a href="https://github.com/fairsharecoin/foundation" target="_blank" rel="noopener">github.com/fairsharecoin/foundation</a><br />
+      Concept/spec archive:
+      <a href="https://github.com/fairsharecoin/fairsharecoin" target="_blank" rel="noopener">github.com/fairsharecoin/fairsharecoin</a>
+    </p>
+    <p class="small-note">
+      If wording conflicts, the foundation repository reflects current implemented behavior.
+    </p>
+  </section>
+
+  <section class="cta-links" style="margin-top: 2rem;">
+    <h2>Explore next</h2>
+    <p><a href="why.html">Why it works</a></p>
+    <p><a href="technical.html">Technical model</a></p>
+    <p><a href="architecture.html">Architecture</a></p>
+  </section>
+
+  <footer>
+    <p>View this project on <a href="https://github.com/fairsharecoin/fairsharecoin.org" target="_blank" rel="noopener">GitHub</a></p>
+    <p>© 2026 FairShareCoin.org — Free to share, free to build on.</p>
+  </footer>
+</body>
+</html>

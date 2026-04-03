@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="FairShareCoin technical overview: Proof-of-Being, identity uniqueness, wallet model, unit scale, recovery, supply logic, and architecture direction in alpha." />
+  <title>Technical Overview — FairShareCoin</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #fff;
+      color: #111;
+      text-align: center;
+      padding: 2rem 1rem;
+      line-height: 1.65;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 { font-size: 2rem; margin-bottom: 0.4rem; }
+    h2 { font-size: 1.45rem; margin-top: 2rem; margin-bottom: 0.4rem; }
+    h3 { font-size: 1.15rem; margin-top: 1.4rem; }
+
+    p, ul, ol { text-align: justify; margin: 0.9rem 0; }
+    ul, ol { padding-left: 1.4rem; text-align: left; }
+
+    em { color: #555; font-style: italic; }
+
+    a { color: #007777; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .center { text-align: center; }
+
+    .chip {
+      display:inline-block;
+      border:1px solid #ddd;
+      border-radius:999px;
+      padding:0.2rem 0.7rem;
+      font-size:0.85rem;
+      color:#333;
+      background:#fafafa;
+      text-decoration:none;
+    }
+
+    .toc {
+      margin: 1.7rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.9rem;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+
+    .status-box {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin: 1rem 0;
+      background: #fafafa;
+      text-align: left;
+    }
+
+    details {
+      border: 1px solid #ddd;
+      padding: 0.55rem 0.9rem;
+      margin: 0.8rem 0;
+      background: #f9f9f9;
+      border-radius: 6px;
+      text-align: left;
+    }
+
+    summary {
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+      font-size: 0.95em;
+    }
+
+    table th, table td {
+      padding: 10px;
+      border: 1px solid #aaa;
+      text-align: left;
+    }
+
+    table thead {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    table tbody tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    blockquote {
+      margin: 1rem 0;
+      padding: 0.6rem 0.85rem;
+      border-left: 3px solid #ddd;
+      background: #fafafa;
+      text-align: left;
+    }
+
+    footer {
+      margin-top: 2.8rem;
+      font-size: 0.9em;
+      color: #555;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="center" style="margin-top: 1rem;">
+    <a href="index.html">Home</a> •
+    <a href="why.html">Why it works</a> •
+    <a href="technical.html"><strong>Technical</strong></a> •
+    <a href="architecture.html">FSC Architecture</a> •
+    <a href="aiautonomy.html">AI &amp; Autonomy</a> •
+    <a href="pastcurrentpost.html">Past &amp; Post</a>
+  </p>
+
+  <p class="center" style="margin-top:0.35rem; margin-bottom:0.55rem;">
+    <a class="chip" href="index.html#status">Alpha (local-first)</a>
+  </p>
+
+  <h1>Technical Overview</h1>
+  <p class="center"><em>Fairness is a principle. This page explains how it is implemented, constrained, and hardened.</em></p>
+
+  <nav class="toc">
+    <a href="#scope">Scope &amp; Status</a>
+    <a href="#proof-of-being">Proof-of-Being</a>
+    <a href="#identity">Identity Uniqueness</a>
+    <a href="#nodes">Node Roles</a>
+    <a href="#wallet-types">Wallet Types</a>
+    <a href="#unit-scale">Unit Scale</a>
+    <a href="#abuse">Abuse Resistance</a>
+    <a href="#recovery">Recovery</a>
+    <a href="#supply">Supply Logic</a>
+    <a href="#dormant">Dormant Wallets</a>
+    <a href="#resilience">Resilience</a>
+    <a href="#vision">Roadmap Direction</a>
+  </nav>
+
+  <h2 id="scope">Scope &amp; Status</h2>
+  <div class="status-box">
+    <ul>
+      <li>Current stage: <strong>alpha (local-first)</strong></li>
+      <li>Identity verifier seam exists; full live ICAO/NFC production verification is not yet deployed</li>
+      <li>Decentralized runtime direction is defined; full consensus layer is still being phased in</li>
+      <li>If wording conflicts with implementation, <code>fairsharecoin/foundation</code> is authoritative</li>
+    </ul>
+  </div>
+
+  <h2 id="proof-of-being">Proof-of-Being</h2>
+  <p>
+    FairShareCoin starts from one rule: each verified living person is eligible for one base issuance unit (1 FSC).
+    This rule aims to remove mining races and reduce issuance privilege tied to hardware or early capital.
+  </p>
+
+  <h2 id="identity">Identity Uniqueness &amp; Privacy</h2>
+  <p>
+    The design target is uniqueness without exposing raw personal identity on-chain.
+    Identity proofs are transformed into deterministic, non-reversible identifiers for claim checks.
+  </p>
+
+  <details>
+    <summary>Current identity direction</summary>
+    <ul>
+      <li>Use ICAO-compliant ePassport verification path (NFC + certificate validation) when live</li>
+      <li>Derive deterministic identity identifier from stable fields</li>
+      <li>Exclude unstable attributes (e.g., nationality, expiry date, sex marker) from uniqueness basis</li>
+      <li>Use public namespace separator (“public pepper”) to prevent cross-system collisions</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Renewal continuity model</summary>
+    <ul>
+      <li>Document renewal should not create duplicate issuance</li>
+      <li>New credential is re-evaluated under the same uniqueness logic</li>
+      <li>Recovery/continuity flow handles document lifecycle changes without re-minting base issuance</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Future cryptographic privacy upgrades</summary>
+    <ul>
+      <li>Selective-disclosure and/or ZK-proof style verification for stronger privacy boundaries</li>
+      <li>Verifier abstraction to support future standards (including digital travel credential formats)</li>
+    </ul>
+  </details>
+
+  <h2 id="nodes">Node Roles (directional model)</h2>
+  <ul>
+    <li><strong>Full Nodes:</strong> full validation + full ledger state</li>
+    <li><strong>Transaction/Relay Nodes:</strong> transaction propagation and lightweight service roles</li>
+    <li><strong>Light Clients:</strong> wallet-focused clients with minimal local requirements</li>
+  </ul>
+
+  <h2 id="wallet-types">Wallet Types</h2>
+  <ul>
+    <li><strong>Verified wallet:</strong> eligible for base issuance under uniqueness rules</li>
+    <li><strong>Anonymous wallets (optional):</strong> transactional/privacy utility; not for extra base issuance claims</li>
+    <li><strong>Named/managed wallets (optional):</strong> usability layer for practical scenarios</li>
+  </ul>
+
+  <h2 id="unit-scale">Unit Scale</h2>
+  <p>
+    1 FSC is divided into 10<sup>12</sup> picoFSC (12 decimals). Public UX can stay human-friendly (often nanoFSC),
+    while internal arithmetic maintains full precision.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Unit</th><th>Symbol</th><th>Value</th><th>Typical use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>FairShareCoin</td><td>FSC</td><td>1</td><td>Base unit</td></tr>
+      <tr><td>Milli</td><td>mFSC</td><td>0.001</td><td>Larger everyday transfers</td></tr>
+      <tr><td>Micro</td><td>μFSC</td><td>0.000001</td><td>Service/task-level transfers</td></tr>
+      <tr><td>Nano</td><td>nFSC</td><td>0.000000001</td><td>Fine-grained visible UX unit</td></tr>
+      <tr><td>Pico</td><td>pFSC</td><td>0.000000000001</td><td><em>Internal precision</em></td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="unit-time-bridge">Unit–Time Bridge (conceptual framing)</h3>
+  <p>Using an 80-year reference lifespan:</p>
+  <ul>
+    <li>1 FSC ≈ 80 years</li>
+    <li>1 mFSC ≈ 29.2 days</li>
+    <li>1 μFSC ≈ 42.1 minutes</li>
+    <li>1 nFSC ≈ 2.52 seconds</li>
+    <li>1 pFSC ≈ 2.52 milliseconds</li>
+  </ul>
+  <p>Per-second reference: 1 second ≈ 0.3969 nFSC.</p>
+
+  <blockquote>
+    Gold tracks scarcity in matter. Bitcoin tracks scarcity in energy. FSC explores scarcity anchored to personhood and time.
+  </blockquote>
+
+  <h2 id="abuse">Abuse Resistance</h2>
+  <ul>
+    <li>Uniqueness checks to prevent duplicate base issuance claims</li>
+    <li>Rate limits and cooldowns at service/API level in current implementation</li>
+    <li>Separation between verified issuance rights and non-issuance wallet usage</li>
+  </ul>
+
+  <h2 id="recovery">Recovery &amp; Continuity</h2>
+  <p>
+    Recovery is designed around identity continuity rather than fragile device custody alone.
+    Device loss should not imply permanent account loss when verified continuity can be re-established.
+  </p>
+
+  <h2 id="supply">Supply Logic</h2>
+  <ul>
+    <li>Base issuance model: one unit per verified person</li>
+    <li>No mining-based inflation race by design direction</li>
+    <li>Circulating availability is shaped by user behavior (spend/save/hold), not fixed speculative schedules</li>
+  </ul>
+
+  <h2 id="dormant">Dormant Wallet Behavior</h2>
+  <p>
+    Dormant wallets represent inactive holders. They remain part of total system accounting,
+    but they do not actively transact while dormant.
+  </p>
+
+  <h2 id="resilience">Resilience &amp; Anti-Fragility Direction</h2>
+  <p>
+    The goal is graceful behavior under adverse conditions: partial connectivity, infrastructure stress,
+    and uneven node availability. This is a design target and ongoing engineering track, not a finished claim.
+  </p>
+
+  <h2 id="vision">Roadmap Direction</h2>
+  <ul>
+    <li>Verifier hardening and standards-aligned identity adapters</li>
+    <li>Decentralized runtime maturation</li>
+    <li>Higher privacy verification proofs</li>
+    <li>Ecosystem layers (apps, voting/governance tooling, group coordination primitives)</li>
+  </ul>
+
+  <p><strong>FairShareCoin starts with proof, not privilege.</strong></p>
+
+  <p class="center" style="margin-top:2rem;">
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Top</a> <br>
+    <a href="architecture.html">Architecture →</a> <br>
+    <a href="why.html">← Back to Why it works</a>
+  </p>
+
+  <footer>
+    <p style="font-size:0.8rem; margin-top:3rem;">© 2026 FairShareCoin.org — Free to share, free to build on.</p>
+  </footer>
+
+</body>
+</html>

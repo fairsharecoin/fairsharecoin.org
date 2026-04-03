@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Past, current, and future context for FairShareCoin: historical lessons, today’s monetary constraints, and the human-time value thesis." />
+  <title>Past, Current, and What Comes After — FairShareCoin</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #fff;
+      color: #111;
+      text-align: center;
+      padding: 2rem 1rem;
+      line-height: 1.65;
+      max-width: 920px;
+      margin: auto;
+    }
+
+    h1 { font-size: 2rem; margin-bottom: 0.45rem; }
+    h2 { font-size: 1.45rem; margin-top: 2rem; margin-bottom: 0.45rem; }
+    h3 { font-size: 1.15rem; margin-top: 1.4rem; }
+
+    p, ul, ol { text-align: justify; margin: 0.9rem 0; }
+    ul, ol { padding-left: 1.4rem; text-align: left; }
+
+    a { color: #007777; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    em { color: #555; font-style: italic; }
+    .center { text-align: center; }
+
+    .chip {
+      display:inline-block;
+      border:1px solid #ddd;
+      border-radius:999px;
+      padding:0.2rem 0.7rem;
+      font-size:0.85rem;
+      color:#333;
+      background:#fafafa;
+      text-decoration:none;
+    }
+
+    .toc {
+      margin: 1.6rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.9rem;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+
+    details {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #f9f9f9;
+      padding: 0.55rem 0.9rem;
+      margin: 0.8rem 0;
+      text-align: left;
+    }
+
+    summary { font-weight: 600; cursor: pointer; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+      font-size: 0.95em;
+    }
+
+    table th, table td {
+      padding: 10px;
+      border: 1px solid #aaa;
+      text-align: left;
+    }
+
+    table thead {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    table tbody tr:nth-child(even) { background-color: #fafafa; }
+
+    blockquote {
+      margin: 1rem 0;
+      padding: 0.6rem 0.85rem;
+      border-left: 3px solid #ddd;
+      background: #fafafa;
+      text-align: left;
+    }
+
+    footer { margin-top: 2.8rem; font-size: 0.9em; color: #555; text-align: center; }
+
+    @media (max-width: 768px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="center" style="margin-top: 1rem;">
+    <a href="index.html">Home</a> •
+    <a href="why.html">Why it works</a> •
+    <a href="technical.html">Technical</a> •
+    <a href="architecture.html">FSC Architecture</a> •
+    <a href="aiautonomy.html">AI &amp; Autonomy</a> •
+    <a href="pastcurrentpost.html"><strong>Past &amp; Post</strong></a>
+  </p>
+
+  <p class="center" style="margin-top:0.35rem; margin-bottom:0.55rem;">
+    <a class="chip" href="index.html#status">Alpha (local-first)</a>
+  </p>
+
+  <h1>Past. Current. Post.</h1>
+  <p class="center"><em>To understand where value can go next, we need to be honest about where it came from—and where it failed.</em></p>
+
+  <nav class="toc">
+    <a href="#past">The Past</a>
+    <a href="#religion">Ancient Warnings</a>
+    <a href="#evolution">Value Evolution</a>
+    <a href="#currently">The Current Moment</a>
+    <a href="#fsc">Why FairShareCoin</a>
+    <a href="#onecoin">Why One Coin</a>
+    <a href="#timevalue">Time as Value</a>
+    <a href="#future">Looking Ahead</a>
+    <a href="#crisis">When It Matters Most</a>
+  </nav>
+
+  <h2 id="past">The Past: What “Economy” Originally Meant</h2>
+  <p>
+    Economy comes from the Greek <em>oikonomia</em>: household stewardship.
+    Not infinite growth. Not extraction. Not quarterly acceleration.
+  </p>
+  <p>
+    At its best, economy meant balance, continuity, and enoughness: preserve what matters,
+    avoid collapse, and make sure people can live.
+  </p>
+
+  <h2 id="religion">Ancient Warnings About Money Power</h2>
+  <p>
+    Across traditions, one idea appears repeatedly: when money systems become exploitative,
+    social dignity breaks with them.
+  </p>
+
+  <details>
+    <summary>Hindu traditions (ancient legal/ethical texts)</summary>
+    <p>Warnings against predatory lending and excessive interest appear early. Lending is permissible; exploitation is not.</p>
+  </details>
+
+  <details>
+    <summary>Judaism (Torah debt ethics)</summary>
+    <p>Debt limits, forgiveness cycles, and community duty aimed to prevent permanent financial bondage.</p>
+  </details>
+
+  <details>
+    <summary>Buddhism</summary>
+    <p>Right livelihood emphasizes reducing suffering, not profiting through structural dependence or coercive debt.</p>
+  </details>
+
+  <details>
+    <summary>Christianity (early to medieval ethics)</summary>
+    <p>Usury debates reflected fear that time-based extraction can turn survival itself into a financial weapon.</p>
+  </details>
+
+  <details>
+    <summary>Islam (riba prohibition)</summary>
+    <p>Unearned financial extraction is treated as unjust; value should emerge through real exchange and accountability.</p>
+  </details>
+
+  <p>
+    These traditions differ, but converge on one warning:
+    <strong>money can coordinate society—or dominate it.</strong>
+  </p>
+
+  <h3 id="ubuntu">Ubuntu and Relational Value</h3>
+  <blockquote>
+    “I am because we are.”
+  </blockquote>
+  <p>
+    Ubuntu frames value as relational, not isolated. FairShareCoin resonates with that: one-person issuance,
+    then value shaped by how we exchange, support, and cooperate.
+  </p>
+
+  <h2 id="evolution">The Evolution of Value Systems</h2>
+  <p>
+    Humanity has repeatedly reinvented money to solve trust, distance, and coordination.
+    Each era improved something—and introduced new fragilities.
+  </p>
+
+  <details>
+    <summary>Clay ledgers and temple accounting (early civilizations)</summary>
+    <p>Money began as memory and obligations tracking—not speculation engines.</p>
+  </details>
+
+  <details>
+    <summary>Commodity and shell currencies</summary>
+    <p>Portable and tangible, but vulnerable to supply shocks and political manipulation.</p>
+  </details>
+
+  <details>
+    <summary>State coinage and debasement cycles</summary>
+    <p>Standardization helped trade; debasement repeatedly damaged trust.</p>
+  </details>
+
+  <details>
+    <summary>Paper money and fiat expansion</summary>
+    <p>Flexibility increased dramatically—along with policy discretion and inflation risk.</p>
+  </details>
+
+  <details>
+    <summary>Bitcoin and cryptographic scarcity</summary>
+    <p>Major breakthrough in decentralized verification. But issuance fairness and mining centralization remain open critiques.</p>
+  </details>
+
+  <details>
+    <summary>FairShareCoin direction</summary>
+    <p>
+      FSC attempts a different anchor: identity-based base issuance, human fairness constraints,
+      and a time-oriented unit model with no mining race.
+    </p>
+  </details>
+
+  <h2 id="currently">Current Moment: What Broke</h2>
+  <p>
+    Today’s dominant systems often reward leverage, timing, and scale more than social usefulness.
+    Debt expands, trust thins, and participation feels increasingly uneven.
+  </p>
+  <p>
+    People sense this mismatch: productivity rises, yet insecurity persists.
+    More complexity, less legitimacy.
+  </p>
+
+  <h2 id="fsc">Post: Why FairShareCoin Exists</h2>
+  <p>
+    FairShareCoin is a response to that legitimacy gap.
+    It does not claim intrinsic value. It proposes fairer issuance rules and cleaner value coordination.
+  </p>
+  <p>
+    Core thesis: if each verified person begins with one base unit,
+    monetary participation starts from dignity rather than privilege.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>System</th>
+        <th>Primary Anchor</th>
+        <th>Typical Weakness</th>
+        <th>FSC Direction</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Fiat</strong></td>
+        <td>State policy + debt</td>
+        <td>Inflation/discretion risk</td>
+        <td>Issuance tied to verified personhood baseline</td>
+      </tr>
+      <tr>
+        <td><strong>Gold</strong></td>
+        <td>Physical scarcity</td>
+        <td>Low divisibility/usability friction</td>
+        <td>Digital divisibility to pico precision</td>
+      </tr>
+      <tr>
+        <td><strong>Bitcoin</strong></td>
+        <td>PoW energy scarcity</td>
+        <td>Mining concentration tendencies</td>
+        <td>No mining race by design direction</td>
+      </tr>
+      <tr>
+        <td><strong>Stablecoins</strong></td>
+        <td>Off-chain reserve trust</td>
+        <td>Counterparty/regulatory dependency</td>
+        <td>Identity-grounded issuance model</td>
+      </tr>
+      <tr>
+        <td><strong>FairShareCoin</strong></td>
+        <td>Verified human uniqueness</td>
+        <td>Verification/adoption execution complexity</td>
+        <td>Human-first fairness + phased hardening</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="onecoin">Why One Coin?</h2>
+  <p>
+    Many distributions were possible: 10, 80, 100 per person. But one base coin has symbolic and structural clarity:
+    one person, one life, one starting share.
+  </p>
+  <p>
+    Divisibility handles practical usage. The fairness signal stays simple.
+  </p>
+
+  <h3>Time Framing</h3>
+  <p>
+    FSC can be interpreted through a life-time lens (reference model):
+    1 FSC as one life-scale unit, divisible into fine-grained time-like fractions.
+  </p>
+
+  <ul>
+    <li>1 FSC ≈ 80 years (reference model)</li>
+    <li>1 second ≈ 0.3969 nFSC</li>
+    <li>1 nFSC ≈ 2.52 seconds</li>
+    <li>1 pFSC ≈ 2.52 milliseconds</li>
+  </ul>
+
+  <h3>Time-to-FSC quick reference</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>FSC (approx)</th>
+        <th>Typical unit label</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1 year</td><td>0.0125 FSC</td><td>centi-scale</td></tr>
+      <tr><td>1 month</td><td>0.00104167 FSC</td><td>milli-scale</td></tr>
+      <tr><td>1 day</td><td>0.00003425 FSC</td><td>sub-milli</td></tr>
+      <tr><td>1 hour</td><td>0.000001427 FSC</td><td>micro-scale</td></tr>
+      <tr><td>1 minute</td><td>0.00000002378 FSC</td><td>nano-scale</td></tr>
+      <tr><td>1 second</td><td>0.000000000396 FSC</td><td>pico-scale precision range</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="timevalue">Time as Value</h2>
+  <p>
+    FSC’s strongest philosophical claim is simple: human time is finite, universal, and non-replicable.
+    A monetary system anchored to that constraint may produce healthier incentives than systems anchored mainly to extraction.
+  </p>
+
+  <blockquote>
+    Not “money from money,” but value from life, exchange, and trust.
+  </blockquote>
+
+  <h2 id="future">Looking Ahead</h2>
+  <p>
+    FSC is currently alpha. The path forward is phased: implementation hardening, open testing, and transparent iteration.
+    No utopian guarantees—just explicit design choices and accountable evolution.
+  </p>
+
+  <h2 id="crisis">When It Matters Most</h2>
+  <p>
+    In stable times, monetary design feels abstract. In crisis, design becomes survival:
+    who can transact, who is excluded, and whose value counts.
+  </p>
+  <p>
+    FSC’s long-term ambition is practical dignity under stress: preserve fair participation when trust is scarce.
+  </p>
+
+  <p class="center" style="font-style: italic; margin-top: 2rem;">
+    Time — the universal currency we keep forgetting.
+  </p>
+
+  <p><strong>When systems fail, legitimacy is whatever stays honest.</strong></p>
+
+  <p class="center" style="margin-top: 2rem;">
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Top</a> <br>
+    <a href="aiautonomy.html">← Back to AI &amp; Autonomy</a> <br>
+    <a href="index.html">← Back to Homepage</a>
+  </p>
+
+  <footer>
+    <p style="font-size:0.8rem; margin-top:3rem;">© 2026 FairShareCoin.org — Free to share, free to build on.</p>
+  </footer>
+
+</body>
+</html>
