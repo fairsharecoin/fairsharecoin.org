@@ -3,7 +3,7 @@
 The official FairShareCoin website.  
 https://fairsharecoin.org
 
-Fair. Final. Yours.  
+Fair. Evolving. Yours.  
 
 ## Repository map (2026-04-03)
 
@@ -11,3 +11,8 @@ Fair. Final. Yours.
 - Concept/spec archive: https://github.com/fairsharecoin/fairsharecoin
 
 If there is any mismatch between docs, `foundation` reflects current implemented behavior.
+
+## Current implementation references
+
+- Foundation README and runbooks: https://github.com/fairsharecoin/foundation
+- Current release/readiness docs: https://github.com/fairsharecoin/foundation/tree/main/docs
