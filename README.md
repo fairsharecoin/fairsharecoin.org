@@ -12,6 +12,8 @@ Fair. Evolving. Yours.
 
 If there is any mismatch between docs, `foundation` reflects current implemented behavior.
 
+Messaging/site audit and paste-ready copy blocks: `WEBSITE_MESSAGE_AUDIT_2026-04-03.md`
+
 ## Current implementation references
 
 - Foundation README and runbooks: https://github.com/fairsharecoin/foundation
