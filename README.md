@@ -5,4 +5,9 @@ https://fairsharecoin.org
 
 Fair. Final. Yours.  
 
-→ For core logic: https://github.com/fairsharecoin/fairsharecoin
+## Repository map (2026-04-03)
+
+- Active implementation baseline (alpha): https://github.com/fairsharecoin/foundation
+- Concept/spec archive: https://github.com/fairsharecoin/fairsharecoin
+
+If there is any mismatch between docs, `foundation` reflects current implemented behavior.
